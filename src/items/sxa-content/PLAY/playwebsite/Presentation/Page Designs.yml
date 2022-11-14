@@ -1,0 +1,14 @@
+﻿---
+ID: "2dc25a94-3fd5-4a15-88a5-fa038cb3d035"
+Parent: "8fb503df-d132-4fc1-a096-18c8b8f19873"
+Template: "7756380e-cb33-4213-b486-b73092696756"
+Path: /sitecore/content/PLAY/playwebsite/Presentation/Page Designs
+BranchID: "45cf9f42-b3ac-4412-aab9-f8441c7e448e"
+SharedFields:
+- ID: "f6d8a61c-2f84-4401-bd24-52d2068172bc"
+  Hint: __Originator
+  Value: "{2EA756FA-AED6-4599-83B7-36FEFE229B31}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
