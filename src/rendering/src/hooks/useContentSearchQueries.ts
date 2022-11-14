@@ -1,0 +1,43 @@
+import { useQueries } from '@tanstack/react-query';
+import { useMemo } from 'react';
+import { ContentSearchResponseBase } from '../interfaces/contentSearch/ContentSearchResponse';
+import * as api from '../lib/contentSearch/api';
+import { ContentSearchRequestProps } from '../lib/contentSearch/api';
+
+type QUERY_TYPES = 'session' | 'speaker' | 'content' | 'vendor' | 'sponsor' | 'free';
+
+type CustomQueries = {
+  [key in QUERY_TYPES]?: unknown;
+};
+
+type UseDiscoverQueriesResult<T extends ContentSearchResponseBase[]> = {
+  isLoading: boolean;
+  result: T;
+};
+
+const useContentSearchQueries = <T extends ContentSearchResponseBase[]>(
+  queriesFor: QUERY_TYPES[],
+  props: Omit<ContentSearchRequestProps, 'entity'>,
+  custom?: CustomQueries
+): UseDiscoverQueriesResult<T> => {
+  const results = useQueries({
+    queries: queriesFor.map((entity) => ({
+      queryKey: [entity, JSON.stringify(props)],
+      queryFn: () =>
+        api.get(
+          { entity: entity === 'free' ? undefined : entity, ...props },
+          custom ? custom[entity] : undefined
+        ),
+    })),
+  });
+
+  const result = useMemo(() => results.map(({ data }) => data).flat(), [results]);
+
+  const isLoading = !!results.find((q) => q.isFetching) && result.length === 0;
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore This should be fixed finding a way to type dynamically useQueries.
+  return { isLoading, result };
+};
+
+export default useContentSearchQueries;
